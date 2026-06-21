@@ -1,0 +1,69 @@
+<%- include('../layout') -%>
+
+<div class="row">
+  <div class="col-12">
+    <h2>Admin Dashboard</h2>
+    <div class="row mb-4">
+      <div class="col-md-4">
+        <div class="card bg-primary text-white">
+          <div class="card-body">
+            <h5>Total Users</h5>
+            <h2><%= allUsers %></h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card bg-success text-white">
+          <div class="card-body">
+            <h5>Total Listings</h5>
+            <h2><%= allListings %></h2>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card bg-warning text-white">
+          <div class="card-body">
+            <h5>Pending Approval</h5>
+            <h2><%= pendingListings.length %></h2>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h4 class="mt-4">Listings Pending Approval</h4>
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Seller</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% if (pendingListings.length === 0) { %>
+            <tr><td colspan="5" class="text-center">No pending listings</td></tr>
+          <% } %>
+          <% pendingListings.forEach(listing => { %>
+            <tr>
+              <td><%= listing.title %></td>
+              <td><%= listing.seller.fullName %></td>
+              <td><%= listing.category %></td>
+              <td><%= listing.price %> ETB</td>
+              <td>
+                <form action="/admin/approve/<%= listing._id %>" method="POST" style="display:inline;">
+                  <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                </form>
+                <form action="/admin/reject/<%= listing._id %>" method="POST" style="display:inline;">
+                  <button type="submit" class="btn btn-sm btn-danger">Reject</button>
+                </form>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
