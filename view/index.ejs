@@ -1,0 +1,48 @@
+<%- include('layout') -%>
+
+<div class="hero-section text-center py-5">
+  <h1 class="display-4 fw-bold">Welcome to Hossana Marketplace</h1>
+  <p class="lead">Your one-stop platform for car rentals and land sales in Hossana, Ethiopia</p>
+  
+  <div class="row mt-5">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h3>🚗 Rent a Car</h3>
+          <p>Find the perfect car for your daily needs</p>
+          <a href="/listings?category=car-rent" class="btn btn-primary">Browse Cars</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h3>🏞️ Buy Land</h3>
+          <p>Invest in prime land in Hossana</p>
+          <a href="/listings?category=land-sell" class="btn btn-success">View Land</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <% if (!user) { %>
+    <div class="mt-5">
+      <a href="/auth/register" class="btn btn-lg btn-warning">Get Started - Register Now</a>
+    </div>
+  <% } %>
+</div>
+
+<style>
+  .hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border-radius: 20px;
+    padding: 60px 20px;
+  }
+  .card {
+    transition: transform 0.3s;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+  }
+</style>
