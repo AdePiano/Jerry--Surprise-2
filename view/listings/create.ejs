@@ -1,0 +1,112 @@
+<%- include('../layout') -%>
+
+<div class="row justify-content-center">
+  <div class="col-md-8">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white">
+        <h4>Create New Listing</h4>
+      </div>
+      <div class="card-body">
+        <% if (error) { %>
+          <div class="alert alert-danger"><%= error %></div>
+        <% } %>
+
+        <form action="/listings/create" method="POST" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label class="form-label">Category</label>
+            <select class="form-control" id="category" name="category" required>
+              <option value="">Select Category</option>
+              <option value="car-rent">🚗 Car - Rent</option>
+              <option value="car-sell">🚗 Car - Sell</option>
+              <option value="land-sell">🏞️ Land - Sell</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Title</label>
+            <input type="text" class="form-control" name="title" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" name="description" rows="4" required></textarea>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Price (ETB)</label>
+                <input type="number" class="form-control" name="price" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label class="form-label">Price Unit</label>
+                <select class="form-control" name="priceUnit">
+                  <option value="total">Total</option>
+                  <option value="per-day">Per Day</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Car Specific Fields -->
+          <div id="carFields" style="display:none;">
+            <h5 class="mt-3">Car Details</h5>
+            <div class="row">
+              <div class="col-md-6">
+                <input type="text" class="form-control mb-2" name="carBrand" placeholder="Brand (e.g., Toyota)">
+                <input type="text" class="form-control mb-2" name="carModel" placeholder="Model (e.g., Corolla)">
+              </div>
+              <div class="col-md-6">
+                <input type="number" class="form-control mb-2" name="carYear" placeholder="Year">
+                <input type="number" class="form-control mb-2" name="carSeats" placeholder="Seats">
+                <select class="form-control" name="transmission">
+                  <option value="manual">Manual</option>
+                  <option value="automatic">Automatic</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Land Specific Fields -->
+          <div id="landFields" style="display:none;">
+            <h5 class="mt-3">Land Details</h5>
+            <div class="row">
+              <div class="col-md-6">
+                <input type="text" class="form-control mb-2" name="landSize" placeholder="Size (e.g., 500 sqm)">
+                <select class="form-control mb-2" name="titleDeed">
+                  <option value="yes">Has Title Deed</option>
+                  <option value="no">No Title Deed</option>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <input type="text" class="form-control mb-2" name="zone" placeholder="Zone/Kebele (e.g., Kebele 01)">
+              </div>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Location (Hossana)</label>
+            <input type="text" class="form-control" name="location" placeholder="e.g., Kebele 03, Near Stadium" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Images (Max 5)</label>
+            <input type="file" class="form-control" name="images" multiple accept="image/*">
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100">Create Listing</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('category').addEventListener('change', function() {
+    const val = this.value;
+    document.getElementById('carFields').style.display = (val === 'car-rent' || val === 'car-sell') ? 'block' : 'none';
+    document.getElementById('landFields').style.display = (val === 'land-sell') ? 'block' : 'none';
+  });
+</script>
