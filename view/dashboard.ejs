@@ -1,0 +1,68 @@
+<%- include('layout') -%>
+
+<div class="row">
+  <div class="col-12">
+    <h2>Welcome, <%= user.fullName %>!</h2>
+    <p class="text-muted">Role: <%= user.role.charAt(0).toUpperCase() + user.role.slice(1) %></p>
+  </div>
+</div>
+
+<div class="row mt-4">
+  <div class="col-md-6">
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white">
+        <h5>📝 My Listings</h5>
+      </div>
+      <div class="card-body">
+        <% if (listings && listings.length > 0) { %>
+          <ul class="list-group">
+            <% listings.forEach(listing => { %>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <span><%= listing.title %></span>
+                <span class="badge <%= listing.isApproved ? 'bg-success' : 'bg-warning' %>">
+                  <%= listing.isApproved ? 'Approved' : 'Pending' %>
+                </span>
+              </li>
+            <% }) %>
+          </ul>
+        <% } else { %>
+          <p>No listings yet. <a href="/listings/create">Create one now</a></p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <div class="card shadow">
+      <div class="card-header bg-success text-white">
+        <h5>📊 My Bookings</h5>
+      </div>
+      <div class="card-body">
+        <% if (bookings && bookings.length > 0) { %>
+          <ul class="list-group">
+            <% bookings.forEach(booking => { %>
+              <li class="list-group-item">
+                <strong><%= booking.listing.title %></strong>
+                <br>
+                <span class="badge <%= booking.status === 'confirmed' ? 'bg-success' : 'bg-warning' %>">
+                  <%= booking.status %>
+                </span>
+                - Total: <%= booking.totalAmount %> ETB
+              </li>
+            <% }) %>
+          </ul>
+        <% } else { %>
+          <p>No bookings yet.</p>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% if (user.role === 'seller') { %>
+  <div class="row mt-4">
+    <div class="col-12">
+      <a href="/listings/create" class="btn btn-primary btn-lg">+ Create New Listing</a>
+    </div>
+  </div>
+<% } %>
