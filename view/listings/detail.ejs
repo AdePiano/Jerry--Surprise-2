@@ -1,0 +1,123 @@
+<%- include('../layout') -%>
+
+<div class="row">
+  <div class="col-md-8">
+    <div class="card shadow">
+      <div class="card-body">
+        <h2><%= listing.title %></h2>
+        <p class="text-muted">Posted by <%= listing.seller.fullName %> • <%= listing.location %></p>
+        
+        <!-- Image Gallery -->
+        <div class="row mb-3">
+          <% if (listing.images && listing.images.length > 0) { %>
+            <% listing.images.forEach(img => { %>
+              <div class="col-md-4 mb-2">
+                <img src="<%= img %>" class="img-fluid rounded" alt="Image">
+              </div>
+            <% }) %>
+          <% } else { %>
+            <div class="col-12"><p class="text-muted">No images available</p></div>
+          <% } %>
+        </div>
+
+        <h5>Description</h5>
+        <p><%= listing.description %></p>
+
+        <h5>Price</h5>
+        <p class="h4 text-primary"><%= listing.price %> ETB <%= listing.priceUnit === 'per-day' ? '/ day' : '' %></p>
+
+        <!-- Car Details -->
+        <% if (listing.carDetails) { %>
+          <h5 class="mt-3">🚗 Car Details</h5>
+          <ul class="list-group">
+            <li class="list-group-item"><strong>Brand:</strong> <%= listing.carDetails.brand %></li>
+            <li class="list-group-item"><strong>Model:</strong> <%= listing.carDetails.model %></li>
+            <li class="list-group-item"><strong>Year:</strong> <%= listing.carDetails.year %></li>
+            <li class="list-group-item"><strong>Seats:</strong> <%= listing.carDetails.seats %></li>
+            <li class="list-group-item"><strong>Transmission:</strong> <%= listing.carDetails.transmission %></li>
+          </ul>
+        <% } %>
+
+        <!-- Land Details -->
+        <% if (listing.landDetails) { %>
+          <h5 class="mt-3">🏞️ Land Details</h5>
+          <ul class="list-group">
+            <li class="list-group-item"><strong>Size:</strong> <%= listing.landDetails.size %></li>
+            <li class="list-group-item"><strong>Title Deed:</strong> <%= listing.landDetails.titleDeed ? '✅ Yes' : '❌ No' %></li>
+            <li class="list-group-item"><strong>Zone:</strong> <%= listing.landDetails.zone %></li>
+          </ul>
+        <% } %>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <!-- Booking Card -->
+    <div class="card shadow">
+      <div class="card-header bg-primary text-white">
+        <h5>Book This</h5>
+      </div>
+      <div class="card-body">
+        <% if (user && listing.isAvailable) { %>
+          <form action="/bookings/create" method="POST">
+            <input type="hidden" name="listingId" value="<%= listing._id %>">
+            
+            <div class="mb-2">
+              <label>Start Date</label>
+              <input type="date" class="form-control" name="startDate" required>
+            </div>
+            <div class="mb-2">
+              <label>End Date</label>
+              <input type="date" class="form-control" name="endDate" required>
+            </div>
+            <div class="mb-2">
+              <label>Payment Method</label>
+              <select class="form-control" name="paymentMethod" required>
+                <option value="telebirr">📱 Telebirr</option>
+                <option value="cbe">🏦 CBE</option>
+              </select>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Book Now</button>
+          </form>
+        <% } else if (!user) { %>
+          <p>Please <a href="/auth/login">login</a> to book this</p>
+        <% } else if (!listing.isAvailable) { %>
+          <p class="text-danger">This listing is no longer available</p>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Negotiation Card -->
+    <div class="card shadow mt-3">
+      <div class="card-header bg-warning">
+        <h5>💰 Negotiate Price</h5>
+      </div>
+      <div class="card-body">
+        <% if (user && listing.isAvailable) { %>
+          <form action="/negotiations/create" method="POST">
+            <input type="hidden" name="listingId" value="<%= listing._id %>">
+            <div class="mb-2">
+              <label>Your Offer (ETB)</label>
+              <input type="number" class="form-control" name="offeredPrice" required>
+            </div>
+            <button type="submit" class="btn btn-warning w-100">Send Offer</button>
+          </form>
+        <% } else if (!user) { %>
+          <p><a href="/auth/login">Login</a> to negotiate</p>
+        <% } %>
+      </div>
+    </div>
+
+    <!-- Seller Info -->
+    <div class="card shadow mt-3">
+      <div class="card-header bg-info text-white">
+        <h5>👤 Seller Info</h5>
+      </div>
+      <div class="card-body">
+        <p><strong>Name:</strong> <%= listing.seller.fullName %></p>
+        <p><strong>Phone:</strong> <%= listing.seller.phone %></p>
+        <p><strong>Email:</strong> <%= listing.seller.email %></p>
+      </div>
+    </div>
+  </div>
+</div>
